@@ -6,4 +6,4 @@
 (define build-deps '("scribble-lib" "racket-doc" "rackunit-lib"))
 (define scribblings '(("scribblings/response-ext.scrbl" ())))
 (define pkg-authors '(junker))
-(define pkg-desc "HTTP response functions for Racket Web Server")
+(define pkg-desc "Extended HTTP response functions for Racket Web Server")
