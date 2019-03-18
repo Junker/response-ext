@@ -29,10 +29,10 @@
     (response/make #:code 404 content))
 
 ; File resonse
-(define/contract (response/file file)
-    (path-string? . -> . response?) ; contract
+(define/contract (response/file file [mime TEXT/HTML-MIME-TYPE])
+    ((path-string?) (bytes?) . ->* . response?) ; contract
     (response/output (λ (op) (let ([ip (open-input-file file)]) (copy-port ip op) (close-input-port ip))) 
-        #:mime-type TEXT/HTML-MIME-TYPE))
+        #:mime-type mime))
 
 ; Json response
 (define/contract (response/json content)

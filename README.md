@@ -13,8 +13,9 @@ Extended HTTP response functions for Racket Web Server
                 #:seconds (current-seconds)
                 #:mime-type TEXT/HTML-MIME-TYPE
                 #:headers (list (make-header #"Cache-Control" #"no-cache"))))
-                
+
 (define resp (response/file "main.rkt"))
+(define resp (response/file "main.rkt" TEXT/HTML-MIME-TYPE))
 
 (define resp (response/not-found "NOT FOUND"))
 
