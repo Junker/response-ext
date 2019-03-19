@@ -20,7 +20,8 @@ Extended HTTP response functions for Racket Web Server
 }
 
 
-@defproc[(response/not-found [content string? "Page not found"]) response?]{
+@defproc[(response/not-found [content string? "Page not found"]
+                             [#:headers headers (listof header?) '()]) response?]{
     returns response with 404 code
 }
 
@@ -31,4 +32,10 @@ Extended HTTP response functions for Racket Web Server
 
 @defproc[(response/json [json jsexpr?]) response?]{
     returns response with JSON
+}
+
+@defproc[(response/redirect [url non-empty-string?]
+                            [permanent boolean? #f]
+                            [#:headers headers (listof header?) '()]) response?]{
+    returns response with redirect 
 }

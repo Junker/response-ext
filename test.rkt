@@ -39,3 +39,11 @@
     (check-equal?
         (get-output-string content-port)
         str))
+
+(test-case "response/redirect"
+
+    (define resp (response/redirect "/my-page"))
+    
+    (check-equal?
+        (response-code resp)
+        302))

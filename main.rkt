@@ -6,7 +6,8 @@
 (provide response/make
          response/not-found
          response/json
-         response/file)
+         response/file
+         response/redirect)
 
 ; Make response
 (define (response/make content 
@@ -14,7 +15,7 @@
     #:message [message #"OK"]
     #:seconds [seconds (current-seconds)]
     #:mime-type [mime-type TEXT/HTML-MIME-TYPE]
-    #:headers [headers (list (make-header #"Cache-Control" #"no-cache"))])
+    #:headers [headers '()])
 
     (response/full code
         message
@@ -24,9 +25,13 @@
         (list (string->bytes/utf-8 content))))
 
 ; 404 Response
-(define/contract (response/not-found [content "Page not found"])
+(define/contract (response/not-found [content "Page not found"] 
+                 #:headers [headers '()])
     (() (string?)  . ->* . response?) ; contract
-    (response/make #:code 404 content))
+    (response/make content 
+                   #:code 404 
+                   #:message #"Not Found"
+                   #:headers headers ))
 
 ; File resonse
 (define/contract (response/file file [mime TEXT/HTML-MIME-TYPE])
@@ -35,10 +40,17 @@
         #:mime-type mime))
 
 ; Json response
-(define/contract (response/json content)
+(define/contract (response/json content 
+                                #:headers [headers (list (make-header #"Cache-Control" #"no-cache"))])
     (jsexpr? . -> . response?) ; contract
     (response/full 
-        200 #"OK" (current-seconds) #"application/json; charset=utf-8" '()
+        200 #"OK" (current-seconds) #"application/json; charset=utf-8" headers
         (list (jsexpr->bytes content))))
 
 
+; Redirect response
+(define/contract (response/redirect url 
+                  [permanent #f]
+                  #:headers [headers '()])
+    ((non-empty-string?) (boolean?) . ->* . response?) ; contract
+    (redirect-to url (if permanent permanently temporarily) #:headers headers))
