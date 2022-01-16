@@ -42,7 +42,7 @@
 ; Json response
 (define/contract (response/json content 
                                 #:headers [headers (list (make-header #"Cache-Control" #"no-cache"))])
-    (jsexpr? . -> . response?) ; contract
+    ((jsexpr?) (#:headers (listof header?)) . ->* . response?) ; contract
     (response/full 
         200 #"OK" (current-seconds) #"application/json; charset=utf-8" headers
         (list (jsexpr->bytes content))))
